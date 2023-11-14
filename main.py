@@ -72,22 +72,26 @@ def calcula_rota(origCoords, destCoord, stepCoords):
     paths = []
 
     # Origem para o passageiro mais longe, usando o algoritimo de Djikstra's
-    paths.append(ox.shortest_path(G, nodeOrig, stepNodesOrder[len(stepNodesOrder) -1][0], weight="travel_time"))
+    if len(stepCoords) > 0:
+        paths.append(ox.shortest_path(G, nodeOrig, stepNodesOrder[len(stepNodesOrder) -1][0], weight="travel_time"))
 
-    i = len(stepNodesOrder) -1
+        i = len(stepNodesOrder) -1
 
-    while i >= 1:
-        paths.append(ox.shortest_path(G, stepNodesOrder[i][0], stepNodesOrder[i - 1][0], weight="travel_time"))
-        i = i-1
+        while i >= 1:
+            paths.append(ox.shortest_path(G, stepNodesOrder[i][0], stepNodesOrder[i - 1][0], weight="travel_time"))
+            i = i-1
 
-    paths.append(ox.shortest_path(G, stepNodesOrder[0][0], nodeDest, weight="travel_time"))
+        paths.append(ox.shortest_path(G, stepNodesOrder[0][0], nodeDest, weight="travel_time"))
+    else:
+        paths.append(ox.shortest_path(G, nodeOrig, nodeDest, weight="travel_time"))
 
     resultCoords = []
 
     for i in range(0, len(paths)):
-        resultCoords.append([])
-        for node in paths[i]:
-            resultCoords[len(resultCoords)-1].append(G.nodes[node])
+        if paths[i] != None:
+            resultCoords.append([])
+            for node in paths[i]:
+                resultCoords[len(resultCoords)-1].append(G.nodes[node])
 
     return resultCoords
 
