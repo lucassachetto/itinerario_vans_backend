@@ -11,6 +11,10 @@ class Addresses(BaseModel):
     dest: list
     steps: list
 
+@app.get("/hello")
+async def root():
+    return {"message": "Hello World"}
+
 @app.post("/getRoute/")
 async def read_item(addresses : Addresses):
     return main.calcula_rota(addresses.orig, addresses.dest, addresses.steps)
